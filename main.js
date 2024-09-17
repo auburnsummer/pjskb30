@@ -149,7 +149,13 @@ const state = {
         // don't include songs that aren't in clearData
         const final = [];
         for (const uid in this.clearData) {
-            if (this.clearData[uid] === 'fc' || this.clearData[uid] === 'ap') {
+            if (this.clearData[uid] === 'fc') {
+                final.push({
+                    ...this.songData[uid],
+                    diffConstant: this.songData[uid].diffConstant - 1,
+                });
+            }
+            if (this.clearData[uid] === 'ap') {
                 final.push(this.songData[uid]);
             }
         }
