@@ -1,0 +1,17 @@
+To run this program, you need a web server.
+
+# Option 1: Python
+
+1. On Windows, install Python 3 (for macOS and Linux, Python 3 is probably already installed)
+    - You can test if you have Python 3 installed by running "python3 --version" in a terminal window.
+2. Open this folder in a terminal
+3. Run command "python3 -m http.server"
+4. Open the URL http://localhost:8000 in a browser
+
+
+# Option 2: Simple Web Server
+
+1. Download Simple Web Server from https://simplewebserver.org/
+2. Click "New server" and then open this folder.
+3. Click "Create server"
+4. Open the url http://localhost:8080 in a browser
