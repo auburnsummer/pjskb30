@@ -130,7 +130,7 @@ How to run this project locally:
                 <!-- for now, we just have a helpful message -->
                 <p>If the font appears as Times New Roman, please wait a bit and then go back and generate again.</p>
                 <button
-                    @click="view = 'dataEntry'"
+                    @click="backToDataView"
                 >
                     Back    
                 </button>
@@ -143,6 +143,7 @@ How to run this project locally:
                     </template>
                 </select>
                 <button @click="addSticker(currentSticker)">Add sticker</button>
+                <button @click="removeAllStickers">Remove all stickers</button>
                 <!-- canvas for Konva -->
                 <div id="canvas-container"></div>
             </div>
