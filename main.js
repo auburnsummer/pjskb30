@@ -105,6 +105,7 @@ const state = {
     reset() {
         this.clearData = {};
         this.pinnedChart = '';
+        this.stickerURLMap = {};
     },
     async fetchData() {
         try {
@@ -186,7 +187,7 @@ const state = {
     },
     changeBackground() {
         if (this.stage) {
-            const bgLayer = this.stage.getLayers()[0];
+            const bgLayer = this.stage.findOne('#bgLayer');
             this.currentBackgroundIdx = (this.currentBackgroundIdx + 1) % BG_URLS.length;
             Konva.Image.fromURL(BG_URLS[this.currentBackgroundIdx], function(img) {
                 bgLayer.add(img);
@@ -206,10 +207,10 @@ const state = {
             height: HEIGHT
         });
         this.stage = stage;
-        const bgLayer = new Konva.Layer();
-        const mainLayer = new Konva.Layer();
+        const bgLayer = new Konva.Layer({id: 'bgLayer'});
+        const mainLayer = new Konva.Layer({id: 'mainLayer'});
 
-        const stickerLayer = new Konva.Layer();
+        const stickerLayer = new Konva.Layer({id: 'stickerLayer'});
 
         stage.add(bgLayer);
         stage.add(mainLayer);
@@ -444,6 +445,26 @@ const state = {
             mainLayer.add(diamond, diamondText);
         }
 
+        // add any stickers that were in the saved state
+        for (const [stickerId, data] of Object.entries(this.stickerURLMap)) {
+            const { stickerURL, currentProps } = data;
+            if (!currentProps) {
+                // we only have the stickerURL but nothing else
+                // we can't add it to the stage
+                // this is likely because the user closed the window 
+                continue;
+            }
+            Konva.Image.fromURL(stickerURL, img => {
+                img.setAttrs({
+                    ...currentProps,
+                    id: stickerId,
+                    name: 'sticker',
+                    draggable: true
+                });
+                stickerLayer.add(img);
+            })
+        }
+
         // controls
         const tr = new Konva.Transformer({
             nodes: [],
@@ -489,22 +510,51 @@ const state = {
     },
     STICKERS,
     currentSticker: "/assets/stickers/airi_aim_for_the_top.png",
-    addSticker(sticker) {
+    stickerURLMap: Alpine.$persist({}), // mapping of sticker IDs to information that can restore the sticker
+    addSticker(stickerURL) {
         // stickers!!!
-        const stickerLayer = this.stage.getLayers().at(-1);
-        Konva.Image.fromURL(sticker, function(img) {
+        const stickerLayer = this.stage.findOne('#stickerLayer');
+        Konva.Image.fromURL(stickerURL, img => {
+            const id = Math.random().toString(16).slice(2);
             img.setAttrs({
+                id,
                 name: 'sticker',
                 draggable: true,
                 scaleX: 0.5,
                 scaleY: 0.5
             });
+            this.stickerURLMap[id] = { stickerURL };
             stickerLayer.add(img);
         });
     },
+    updateStickerState() {
+        const stickerLayer = this.stage.findOne('#stickerLayer');
+        const stickers = stickerLayer.find('.sticker');
+        stickers.forEach((sticker) => {
+            this.stickerURLMap[sticker.id()] = {
+                ...this.stickerURLMap[sticker.id()],
+                currentProps: {
+                    x: sticker.x(),
+                    y: sticker.y(),
+                    rotation: sticker.rotation(),
+                    scaleX: sticker.scaleX(),
+                    scaleY: sticker.scaleY(),
+                }
+            }
+        });
+    },
+    removeAllStickers() {
+        const stickerLayer = this.stage.findOne('#stickerLayer');
+        const stickers = stickerLayer.find('.sticker');
+        stickers.forEach((sticker) => {
+            sticker.destroy();
+        });
+        this.stickerURLMap = {};
+    },
     downloadImage() {
         if (this.stage) {
-            const stickerLayer = this.stage.getLayers().at(-1);
+            this.updateStickerState();
+            const stickerLayer = this.stage.findOne('#stickerLayer');
             const tr = stickerLayer.findOne('.transformer');
             if (tr) {
                 tr.hide();
@@ -523,6 +573,7 @@ const state = {
     },
     copyImageToClipboard() {
         if (this.stage) {
+            this.updateStickerState();
             const stickerLayer = this.stage.getLayers().at(-1);
             const tr = stickerLayer.findOne('.transformer');
             if (tr) {
@@ -541,8 +592,16 @@ const state = {
                 alert("Copied!");
             })();
         }
+    },
+    backToDataView() {
+        if (this.stage) {
+            this.updateStickerState();
+        }
+        this.view = 'dataEntry';
     }
 }
+
+window.state = state;
 
 // register the data so it can be used in the HTML
 Alpine.data('state', () => state)
