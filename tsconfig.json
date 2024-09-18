@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+      "lib": ["ESNext.Array", "DOM", "ESNext"],
+      "allowJs": true,
+      "noEmit": true
+    }
+}

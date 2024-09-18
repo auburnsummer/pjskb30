@@ -129,7 +129,7 @@ const state = {
                     // skip this row, we don't have enough information to use this chart
                     console.log('skipping row', row);
                 } else {
-                    state.songData[newRow['uid']] = newRow;
+                    this.songData[newRow['uid']] = newRow;
                 }
             });
             this.loadingState = 'loaded';
