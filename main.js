@@ -551,47 +551,42 @@ const state = {
         });
         this.stickerURLMap = {};
     },
+    async getStageBlob() {
+        this.updateStickerState();
+        const stickerLayer = this.stage.findOne('#stickerLayer');
+        const tr = stickerLayer.findOne('.transformer');
+        if (tr) {
+            tr.hide();
+        }
+        const blob = await this.stage.toBlob();
+        if (tr) {
+            tr.show();
+        }
+        return blob;
+    },
     downloadImage() {
-        if (this.stage) {
-            this.updateStickerState();
-            const stickerLayer = this.stage.findOne('#stickerLayer');
-            const tr = stickerLayer.findOne('.transformer');
-            if (tr) {
-                tr.hide();
-            }
-            const url = this.stage.toDataURL();
+        (async () => {
+            const blob = await this.getStageBlob();
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.download = 'image.png';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            if (tr) {
-                tr.show();
-            }
-        }
+            URL.revokeObjectURL(url);
+        })();
     },
     copyImageToClipboard() {
-        if (this.stage) {
-            this.updateStickerState();
-            const stickerLayer = this.stage.getLayers().at(-1);
-            const tr = stickerLayer.findOne('.transformer');
-            if (tr) {
-                tr.hide();
-            }
-            (async () => {
-                const blob = await this.stage.toBlob();
-                navigator.clipboard.write([
-                    new ClipboardItem({
-                        'image/png': blob
-                    })
-                ]);
-                if (tr) {
-                    tr.show();
-                }
-                alert("Copied!");
-            })();
-        }
+        (async () => {
+            const blob = await this.getStageBlob();
+            navigator.clipboard.write([
+                new ClipboardItem({
+                    'image/png': blob
+                })
+            ]);
+            alert("Copied!");
+        })();
     },
     backToDataView() {
         if (this.stage) {
