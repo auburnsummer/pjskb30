@@ -131,13 +131,19 @@ export const imageSlice = () => ({
 
         this.loadingMessage = 'Drawing cards...';
 
+        const GUTTER_WIDTH = 30;
+        const GUTTER_HEIGHT = 35;
+        const CARD_WIDTH = (WIDTH - (GUTTER_WIDTH * 4)) / 3;
+        const CARD_HEIGHT = (HEIGHT - HEADER_HEIGHT - (GUTTER_HEIGHT * 11)) / 10;
+
+        // cache as much as we can up front
         const apFcCommonProps = {
             x: 0,
             y: 0,
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
             opacity: 1,
-            cornerRadius: 10,
+            cornerRadius: 2,
             shadowColor: '#00194a',
             shadowBlur: 5,
             shadowOffset: { x: 0, y: 2 },
@@ -166,16 +172,110 @@ export const imageSlice = () => ({
         apBaseCard.cache();
         fcBaseCard.cache();
 
+        // difficulty indicators
+        const BADGE_WIDTH = 37;
+        const BADGE_HEIGHT = 22;
+
+        // color of badge depends on difficulty category of chart
+        // append is a bit of a gradient to match the ingame styling
+        const badgeColors = {
+            'Expert': { fill: '#FF457A' },
+            'Master': { fill: '#781c94' },
+            'Append': {
+                fillLinearGradientStartPoint: { x: 0, y: 0 },
+                fillLinearGradientEndPoint: { x: BADGE_WIDTH, y: BADGE_HEIGHT },
+                fillLinearGradientColorStops: [0, '#7857ff', 1, '#fcacf7'],
+                strokeWidth: 2,
+                stroke: 'white',
+            }
+        };
+
+        const badges = Object.keys(badgeColors).reduce((acc, difficulty) => {
+            const badge = new Konva.Rect({
+                ...badgeColors[difficulty],
+                width: BADGE_WIDTH,
+                height: BADGE_HEIGHT,
+                opacity: 1,
+                cornerRadius: 10,
+            });
+            badge.cache();
+            acc[difficulty] = badge;
+            return acc;
+        }, {});
+
+        // AP / FC indicator in bottom-right corner
+        const DIAMOND_WIDTH = 36;
+        const DIAMOND_HEIGHT = 36;
+        const appendShape = {
+            points: [
+                0, 0,
+                DIAMOND_WIDTH / 2, DIAMOND_HEIGHT / 7,
+                DIAMOND_WIDTH, 0,
+                DIAMOND_WIDTH - (DIAMOND_WIDTH / 7), DIAMOND_HEIGHT / 2,
+                DIAMOND_WIDTH, DIAMOND_HEIGHT,
+                DIAMOND_WIDTH / 2, DIAMOND_HEIGHT - (DIAMOND_HEIGHT / 7),
+                0, DIAMOND_HEIGHT,
+                DIAMOND_WIDTH / 7, DIAMOND_HEIGHT / 2,
+                0, 0
+            ]
+        };
+        const normalShape = {
+            points: [
+                // FC shape
+                DIAMOND_WIDTH / 2, 0,
+                DIAMOND_WIDTH, DIAMOND_HEIGHT / 2,
+                DIAMOND_WIDTH / 2, DIAMOND_HEIGHT,
+                0, DIAMOND_HEIGHT / 2,
+                DIAMOND_WIDTH / 2, 0
+            ]
+        };
+        const apFill = {
+            fillPriority: 'linear-gradient',
+            fillLinearGradientStartPoint: { x: DIAMOND_WIDTH / 2, y: 0 },
+            fillLinearGradientEndPoint: { x: DIAMOND_WIDTH / 2, y: DIAMOND_HEIGHT },
+            fillLinearGradientColorStops: [0, '#FF8EFF', 0.3, '#FF8EFF', 0.7, '#00E3C7', 1, '#00E3C7'],
+        }
+        const normalFill = {
+            fill: FC_COLOR
+        }
+        const commonProps = {
+            closed: true,
+            opacity: 1,
+            stroke: 'black',
+            strokeWidth: 2,
+            shadowColor: '#00194a',
+            shadowBlur: 5,
+            shadowOffset: { x: 0, y: 2 },
+            shadowOpacity: 0.5
+        }
+        const apAppendShape = new Konva.Line({
+            ...commonProps,
+            ...appendShape,
+            ...apFill
+        });
+        
+        const fcAppendShape = new Konva.Line({
+            ...commonProps,
+            ...appendShape,
+            ...normalFill
+        });
+        const apNormalShape = new Konva.Line({
+            ...commonProps,
+            ...normalShape,
+            ...apFill
+        });
+        const fcNormalShape = new Konva.Line({
+            ...commonProps,
+            ...normalShape,
+            ...normalFill
+        });
+
         // each card
         for (const [idx, song] of Object.entries(this.getFinalDataList()).slice(0, 30)) {
             // draw the base card
             const gridX = idx % 3;
             const gridY = Math.floor(idx / 3);
             const HEADER_HEIGHT = 32;
-            const GUTTER_WIDTH = 30;
-            const GUTTER_HEIGHT = 35;
-            const CARD_WIDTH = (WIDTH - (GUTTER_WIDTH * 4)) / 3;
-            const CARD_HEIGHT = (HEIGHT - HEADER_HEIGHT - (GUTTER_HEIGHT * 11)) / 10;
             const xPos = gridX * CARD_WIDTH + (GUTTER_WIDTH * (gridX + 1));
             const yPos = HEADER_HEIGHT + (gridY * CARD_HEIGHT) + (GUTTER_HEIGHT * (gridY + 1));
 
@@ -186,36 +286,6 @@ export const imageSlice = () => ({
                 y: yPos,
             });
             mainLayer.add(clone);
-
-
-            const apEffect = this.clearData[song.uid] === 'ap' ? {
-                // AP styling - gradient border + slight gradient background
-                strokeWidth: 5,
-                strokeLinearGradientStartPoint: { x: CARD_WIDTH / 2, y: 0 },
-                strokeLinearGradientEndPoint: { x: CARD_WIDTH / 2, y: CARD_HEIGHT },
-                strokeLinearGradientColorStops: [0, '#FF8EFF', 1, '#00E3C7'],
-                fillLinearGradientStartPoint: { x: CARD_WIDTH, y: 0 },
-                fillLinearGradientEndPoint: { x: 0, y: CARD_HEIGHT },
-                fillLinearGradientColorStops: [0, 'white', 1, '#f2feff'],
-            } : {
-                // FC styling - single color border + white background
-                strokeWidth: 2,
-                stroke: FC_COLOR,
-                fill: 'white'
-            };
-            const rect = new Konva.Rect({
-                x: xPos,
-                y: yPos,
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-                opacity: 1,
-                shadowColor: '#00194a',
-                shadowBlur: 5,
-                shadowOffset: { x: 0, y: 2 },
-                shadowOpacity: 0.5,
-                ...apEffect
-            });
-            mainLayer.add(rect);
 
             // image on left side of card
             const JACKET_PADDING = 15;
@@ -249,34 +319,15 @@ export const imageSlice = () => ({
             });
             mainLayer.add(levelText);
 
-            // difficulty number badge
-            const BADGE_WIDTH = 37;
-            const BADGE_HEIGHT = 22;
+            // // difficulty number badge
             const BADGE_X = xPos - (BADGE_WIDTH / 2);
             const BADGE_Y = yPos - (BADGE_HEIGHT / 2);
-            // color of badge depends on difficulty category of chart
-            // append is a bit of a gradient to match the ingame styling
-            const badgeColor = {
-                'Expert': { fill: '#FF457A' },
-                'Master': { fill: '#781c94' },
-                'Append': {
-                    fillLinearGradientStartPoint: { x: 0, y: 0 },
-                    fillLinearGradientEndPoint: { x: BADGE_WIDTH, y: BADGE_HEIGHT },
-                    fillLinearGradientColorStops: [0, '#7857ff', 1, '#fcacf7'],
-                    strokeWidth: 2,
-                    stroke: 'white',
-                }
-            }[song.difficulty];
 
-            const difficultyRect = new Konva.Rect({
+            const difficultyRect = badges[song.difficulty].clone({
                 x: BADGE_X,
-                y: BADGE_Y,
-                width: BADGE_WIDTH,
-                height: BADGE_HEIGHT,
-                opacity: 1,
-                cornerRadius: 10,
-                ...badgeColor
+                y: BADGE_Y
             });
+
             const difficultyText = new Konva.Text({
                 x: BADGE_X,
                 y: BADGE_Y,
@@ -297,54 +348,22 @@ export const imageSlice = () => ({
             // indicator in lower right corner showing FC or AP
             // the shape is a diamond for normal charts and a weird shape for Append charts
             // the fill is a gradient for AP and a solid color for FC
-            const DIAMOND_WIDTH = 36;
-            const DIAMOND_HEIGHT = 36;
+            const indicatorShape = 
+                this.clearData[song.uid] === 'ap'
+                    ? song.difficulty === 'Append'
+                        ? apAppendShape
+                        : apNormalShape
+                    : song.difficulty === 'Append'
+                        ? fcAppendShape
+                        : fcNormalShape;
+                
             const DIAMOND_X = xPos + CARD_WIDTH - (DIAMOND_WIDTH / 2);
             const DIAMOND_Y = yPos + CARD_HEIGHT - (DIAMOND_HEIGHT / 2);
-            const diamondApEffect = this.clearData[song.uid] === 'ap' ? {
-                // AP fill
-                fillPriority: 'linear-gradient',
-                fillLinearGradientStartPoint: { x: DIAMOND_WIDTH / 2, y: 0 },
-                fillLinearGradientEndPoint: { x: DIAMOND_WIDTH / 2, y: DIAMOND_HEIGHT },
-                fillLinearGradientColorStops: [0, '#FF8EFF', 0.3, '#FF8EFF', 0.7, '#00E3C7', 1, '#00E3C7'],
-            }: {
-                // FC fill
-                fill: FC_COLOR
-            };
-            const points = song.difficulty === 'Append'
-            ? [
-                // Append shape
-                0, 0,
-                DIAMOND_WIDTH / 2, DIAMOND_HEIGHT / 7,
-                DIAMOND_WIDTH, 0,
-                DIAMOND_WIDTH - (DIAMOND_WIDTH / 7), DIAMOND_HEIGHT / 2,
-                DIAMOND_WIDTH, DIAMOND_HEIGHT,
-                DIAMOND_WIDTH / 2, DIAMOND_HEIGHT - (DIAMOND_HEIGHT / 7),
-                0, DIAMOND_HEIGHT,
-                DIAMOND_WIDTH / 7, DIAMOND_HEIGHT / 2,
-                0, 0
-            ]: [
-                // FC shape
-                DIAMOND_WIDTH / 2, 0,
-                DIAMOND_WIDTH, DIAMOND_HEIGHT / 2,
-                DIAMOND_WIDTH / 2, DIAMOND_HEIGHT,
-                0, DIAMOND_HEIGHT / 2,
-                DIAMOND_WIDTH / 2, 0
-            ]
-            const diamond = new Konva.Line({
+            const indicatorClone = indicatorShape.clone({
                 x: DIAMOND_X,
-                y: DIAMOND_Y,
-                points,
-                closed: true,
-                opacity: 1,
-                stroke: 'black',
-                strokeWidth: 2,
-                shadowColor: '#00194a',
-                shadowBlur: 5,
-                shadowOffset: { x: 0, y: 2 },
-                shadowOpacity: 0.5,
-                ...diamondApEffect
+                y: DIAMOND_Y
             });
+            mainLayer.add(indicatorClone);
 
             const diamondText = new Konva.Text({
                 x: DIAMOND_X,
@@ -358,8 +377,11 @@ export const imageSlice = () => ({
                 align: 'center',
                 verticalAlign: 'middle',
             });
-            mainLayer.add(diamond, diamondText);
+            mainLayer.add(indicatorClone, diamondText);
+            await raf();
         }
+
+        this.loadingMessage = 'Drawing stickers...';
 
         // add any stickers that were in the saved state
         for (const [stickerId, data] of Object.entries(this.stickerURLMap)) {
@@ -423,6 +445,8 @@ export const imageSlice = () => ({
         bgLayer.draw();
         mainLayer.draw();
         stickerLayer.draw();
+
+        this.loadingMessage = '';
     },
 
 })
