@@ -64,7 +64,7 @@ How to run this project locally:
                         </tr>
                     </thead>
                     <tbody>
-                        <template x-for="song in sortedDataList">
+                        <template x-for="song in getSortedDataList">
                             <tr>
                                 <td>
                                     <div class="song-info">
@@ -125,6 +125,7 @@ How to run this project locally:
         <template x-if="loadingState === 'loaded' && view === 'image'">
             <div>
                 <h2>Here is your image</h2>
+                <p x-text="loadingMessage"></p>
                 <!-- we could use FontFaceObserver to wait until font is loaded but... -->
                 <!-- ...they have to take some time to fill in the FCs/APs anyway, so it's unlikely that it's a problem -->
                 <!-- for now, we just have a helpful message -->
