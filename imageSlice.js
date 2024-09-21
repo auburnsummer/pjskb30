@@ -126,10 +126,7 @@ export const imageSlice = () => ({
 
         this.loadingMessage = 'Loading background image...';
 
-        // // background image
-        // Konva.Image.fromURL(BG_URLS[this.currentBackgroundIdx], function(img) {
-        //     bgLayer.add(img);
-        // });
+        // background image
         const img = await loadImage(BG_URLS[this.currentBackgroundIdx]);
         bgLayer.add(img);
 
@@ -562,7 +559,7 @@ export const imageSlice = () => ({
     copyImageToClipboard() {
         if (this.stage) {
             this.updateStickerState();
-            const stickerLayer = this.stage.getLayers().at(-1);
+            const stickerLayer = this.stage.findOne('#stickerLayer');
             const tr = stickerLayer.findOne('.transformer');
             if (tr) {
                 tr.hide();
