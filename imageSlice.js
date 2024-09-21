@@ -329,6 +329,7 @@ export const imageSlice = () => ({
                 x: xPos,
                 y: yPos,
             });
+            clone.cache();
             mainLayer.add(clone);
 
             // image on left side of card
@@ -407,6 +408,7 @@ export const imageSlice = () => ({
                 x: DIAMOND_X,
                 y: DIAMOND_Y
             });
+            indicatorClone.cache();
             mainLayer.add(indicatorClone);
 
             const diamondText = new Konva.Text({
