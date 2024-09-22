@@ -336,16 +336,16 @@ export const imageSlice = () => ({
             const JACKET_PADDING = 15;
             const JACKET_WIDTH = CARD_HEIGHT - (JACKET_PADDING * 2);
             const jacketURL = this.getJacketURL(song.songId);
-            Konva.Image.fromURL(jacketURL, function(img) {
-                img.setAttrs({
-                    x: xPos + JACKET_PADDING,
-                    y: yPos + JACKET_PADDING,
-                    width: JACKET_WIDTH,
-                    height: JACKET_WIDTH
-                })
-                mainLayer.add(img);
-            });
-
+            loadImage(jacketURL)
+                .then(img => {
+                    img.setAttrs({
+                        x: xPos + JACKET_PADDING,
+                        y: yPos + JACKET_PADDING,
+                        width: JACKET_WIDTH,
+                        height: JACKET_WIDTH
+                    })
+                    mainLayer.add(img);
+                });
             // song name
             const levelText = new Konva.Text({
                 x: xPos + (2 * JACKET_PADDING) + JACKET_WIDTH,
@@ -494,7 +494,6 @@ export const imageSlice = () => ({
 
         this.loadingMessage = '';
     },
-    // draw the image -- here's where the sausage is made [fast-travel-image-drawing]
     STICKERS,
     currentSticker: "/assets/stickers/airi_aim_for_the_top.png",
     stickerURLMap: Alpine.$persist({}), // mapping of sticker IDs to information that can restore the sticker
@@ -546,16 +545,16 @@ export const imageSlice = () => ({
             if (tr) {
                 tr.hide();
             }
-            const url = this.stage.toDataURL();
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'image.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            if (tr) {
-                tr.show();
-            }
+            (async () => {
+                const blob = await this.stage.toBlob();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'image.png';
+                link.click();
+                if (tr) {
+                    tr.show();
+                }
+            })();
         }
     },
     copyImageToClipboard() {
