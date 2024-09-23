@@ -5,7 +5,7 @@
  */
 export const clearDataSlice = () => ({
     /** @type {Record<string, "fc" | "ap">} */
-    clearData: Alpine.$persist({}), // mapping of songId to "fc" | "ap", or not set
+    clearData: {}, // mapping of songId to "fc" | "ap", or not set
     /** @type {string} */
     pinnedChart: Alpine.$persist(''), // uid of pinned chart if there is one -- a pinned chart is always first regardless of diff
     // sorting for the final image -- sort by diff constant with FC adjustment
