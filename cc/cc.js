@@ -13,9 +13,24 @@ const state = {
     chartData: [],
     searchQuery: "",
     searchResults: [],
+    clearSetting: false,
+    timeoutId: null,
     doSearch() {
         const results = this.searcher.search(this.searchQuery);
         this.searchResults = results;
+        if (this.clearSetting) {
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+            }
+            this.timeoutId = setTimeout(() => {
+                this.searchQuery = "";
+            }, 5000);
+        } else {
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+                this.timeoutId = null;
+            }
+        }
     },
     async fetchData() {
         const response = await fetch(API_URL);

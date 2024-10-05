@@ -81,6 +81,8 @@
             <template x-if="loadingState === 'loaded'">
                 <div>
                     <input type="text" x-model="searchQuery" @input="doSearch()" class="search_box"/>
+                    <label for="clearSetting">Auto clear the box after 5 seconds of inactivity</label>
+                    <input type="checkbox" id="clearSetting" x-model="clearSetting" />
                     <template x-for="result in searchResults">
                         <div class="search_result">
                             <div class="song_name">
