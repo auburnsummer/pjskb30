@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CC difficulties</title>
+        <style>
+        body {
+             font-family: monospace;
+        }
+        .search_box {
+            /* big text and a box with a big drop shadow */
+            font-size: 24px;
+            padding: 10px;
+            border: 1px solid black;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1.5rem;
+        }
+
+        .search_result {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .song_name {
+            font-weight: bold;
+            min-width: 25rem;
+            text-align: end;
+        }
+
+        .difficulty {
+            /* border */
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            padding: 0.5rem;
+            min-width: 6rem;
+        }
+
+        .difficulty p {
+            text-align: center;
+        }
+
+        .difficulty p:first-child {
+            color: white;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .difficulty .MASTER {
+            background-color: #c113c1;
+        }
+
+        .difficulty .EXPERT {
+            background-color: #dc0202;
+        }
+
+        .difficulty .HARD {
+            background-color: #e99d10;
+        }
+
+        .difficulty .NORMAL {
+            background-color: #186ee8;
+        }
+
+        .difficulty .EASY {
+            background-color: #20d21a;
+        }
+        </style>
+    </head>
+    <body>
+        <script type="module" src="/cc/cc.js"></script>
+        <div x-data="state">
+            <template x-if="loadingState === 'loading'">
+                <div>Downloading chart constants from the spreadsheet, please wait...</div>
+            </template>
+            <template x-if="loadingState === 'loaded'">
+                <div>
+                    <input type="text" x-model="searchQuery" @input="doSearch()" class="search_box"/>
+                    <template x-for="result in searchResults">
+                        <div class="search_result">
+                            <div class="song_name">
+                                <p x-text="result.songNameEN"></p>
+                            </div>
+                            <template x-for="difficulty in result.difficulties">
+                                <div class="difficulty">
+                                    <p x-text="difficulty.name" :class="difficulty.name"></p>
+                                    <p x-text="difficulty.percent"></p>
+                                </div>
+                            </template>
+                            <p x-text="result.notes"></p>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </body>
+</html>
