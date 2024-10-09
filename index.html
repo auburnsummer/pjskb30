@@ -1,160 +1,34 @@
 <!DOCTYPE html>
-<!--
-How to run this project locally:
- 1. On Windows, install Python 3 (for macOS and Linux, Python 3 is probably already installed)
- 2. Open the folder in a terminal
- 3. Run command "python3 -m http.server"
- 4. Open the URL http://localhost:8000 in a browser
--->
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>b30</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link rel="stylesheet" href="/main.css"/>
-
-    <!-- font -->
-    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="preload" as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
-</head>
-<body>
-    <script type="module" src="/main.js"></script>
-    <div x-data="state">
-        <!-- while alpine.js is loading -->
-        <!-- also, we use the font here so that it's hopefully loaded by the time the user starts making the image -->
-        <p x-show="false" style="font-family: Itim, sans-serif;">Loading...</p>
-        <!-- while chart constant sheet is loading -->
-        <template x-if="loadingState === 'loading'">
-            <div>Downloading chart constants from the spreadsheet, please wait...</div>
-        </template>
-        <!-- DATA ENTRY VIEW -->
-        <template x-if="loadingState === 'loaded' && view === 'dataEntry'">
-            <div>
-                <h2>B30 Data Entry</h2>
-                <p>Mark each song with "AP" or "FC" accordingly. After marking 30 or so, press "Generate Image" button.</p>
-                <p><a href="https://github.com/auburnsummer/pjskb30/archive/refs/heads/main.zip">Download ZIP of source code</a></p>
-                <p><a href="https://github.com/auburnsummer/pjskb30">View GitHub of this project</a></p>
-                <!-- controls -->
-                <label for="language-select">Song Language (not server):</label>
-                <select name="language" id="language-select" x-model="currentLanguage">
-                    <option value="en">English</option>
-                    <option value="jp">Japanese</option>
-                </select>
-                <button
-                    @click="reset"
-                >
-                    Reset Everything
-                </button>
-                <button
-                    @click="switchToImage"
-                >
-                    Generate Image (browser may be not responsive for a bit)
-                </button>
-                                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Song</th>
-                            <th>Difficulty</th>
-                            <th>In-Game Difficulty</th>
-                            <th>AP/FC</th>
-                            <th>Pinned</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template x-for="song in getSortedDataList">
-                            <tr>
-                                <td>
-                                    <div class="song-info">
-                                        <span x-text="currentLanguage === 'en' ? song.songNameEn : song.songNameJp"></span>
-                                        <img :src="getJacketURL(song.songId)" style="width: 80px; height: 80px;"/>
-                                    </div>
-                                </td>
-                                <td x-text="song.difficulty"></td>
-                                <td x-text="song.diffLevel"></td>
-                                <td>
-                                    <!-- AP/FC controls -- we show clear button if either of the two is set -->
-                                    <fieldset>
-                                        <input
-                                            type="radio"
-                                            :name="song.uid + 'status'"
-                                            value="fc"
-                                            :id="'fc' + song.uid"
-                                            x-model="clearData[song.uid]"
-                                        />
-                                        <label :for="'fc' + song.uid">FC</label>
-                                        <input
-                                            type="radio"
-                                            :name="song.uid + 'status'"
-                                            value="ap"
-                                            :id="'ap' + song.uid"
-                                            x-model="clearData[song.uid]"
-                                        />
-                                        <label for="'ap' + song.uid">AP</label>                   
-
-                                        <button x-show="clearData[song.uid]" @click="clearData[song.uid] = null">Clear</button>
-                                    </fieldset>
-                                </td>
-                                <td>
-                                    <!-- similar setup to above, the radio button is replaced by the clear button -->
-                                    <input
-                                        type="radio"
-                                        name="pinnedChart"
-                                        :value="song.uid"
-                                        :disabled="!clearData[song.uid]"
-                                        x-model="pinnedChart"
-                                        x-show="pinnedChart !== song.uid"
-                                    />
-                                    <button
-                                        x-show="pinnedChart === song.uid"
-                                        @click="pinnedChart = null"
-                                    >
-                                        Clear pin
-                                    </button>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-            </div>
-        </template>
-        <!-- IMAGE VIEW -->
-        <!-- nb. drawImage is called by the switchToImage() function -->
-        <template x-if="loadingState === 'loaded' && view === 'image'">
-            <div>
-                <h2>Here is your image</h2>
-                <p x-text="loadingMessage"></p>
-                <!-- we could use FontFaceObserver to wait until font is loaded but... -->
-                <!-- ...they have to take some time to fill in the FCs/APs anyway, so it's unlikely that it's a problem -->
-                <!-- for now, we just have a helpful message -->
-                <p>If the font appears as Times New Roman, please wait a bit and then go back and generate again.</p>
-                <button
-                    @click="backToDataView"
-                >
-                    Back    
-                </button>
-                <button @click="downloadImage">Download</button>
-                <button @click="copyImageToClipboard">Copy Image to Clipboard</button>
-                <button @click="changeBackground">Change Background</button>
-                <select x-model="currentSticker">
-                    <template x-for="(stickerPath, stickerName) in STICKERS">
-                        <option x-text="stickerName" :value="stickerPath"></option>
-                    </template>
-                </select>
-                <button @click="addSticker(currentSticker)">Add sticker</button>
-                <button @click="removeAllStickers">Remove all stickers</button>
-                <!-- canvas for Konva -->
-                <div id="canvas-container"></div>
-            </div>
-        </template>
-        <template x-if="loadingState === 'error'">
-            <div>
-                <p>Error! Maybe the console will have more info, :airisorry:</p>
-            </div>
-        </template>
-    </div>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>b30</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+        <script type="importmap">
+            {
+              "imports": {
+                "preact": "https://esm.sh/preact@10.23.1",
+                "preact/": "https://esm.sh/preact@10.23.1/",
+                "@preact/signals": "https://esm.sh/@preact/signals@1.3.0?external=preact",
+                "htm/preact": "https://esm.sh/htm@3.1.1/preact?external=preact",
+                "@vanillaes/csv": "https://esm.sh/@vanillaes/csv@3.0.4",
+                "konva": "https://esm.sh/konva@9.3.15"
+              }
+            }
+        </script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --bulma-family-primary: "Atkinson Hyperlegible", sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <noscript>javascript D:</noscript>
+        <script type="module" src="/main2.js"></script>
+        <div id="root"></div>
+    </body>
 </html>
