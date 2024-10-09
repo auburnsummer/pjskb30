@@ -33,12 +33,6 @@ function TableRow({song}) {
 
     const isIrrelevant = song.diffConstant < $lowestInBest30.value;
 
-    const diffColor = {
-        'Append': '#ffd1f7',
-        'Master': '#c8b5ff',
-        'Expert': '#ff7a7a',
-    }
-
     return html`
         <tr>
             <td
@@ -47,7 +41,7 @@ function TableRow({song}) {
                 ${$currentLanguage.value === 'en' ? song.songNameEn : song.songNameJp}
             </td>
             <td>
-                <span class="tag" style="background-color: ${diffColor[song.difficulty]}">
+                <span class="tag ${song.difficulty}">
                     ${song.difficulty}
                 </span>
             </td>
