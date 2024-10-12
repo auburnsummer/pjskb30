@@ -85,7 +85,10 @@
         <script type="module" src="/cc/cc.js"></script>
         <div x-data="state">
             <template x-if="loadingState === 'loading'">
-                <div>Downloading chart constants from the spreadsheet, please wait...</div>
+                <div>
+                    <p>Downloading chart constants from the spreadsheet, please wait...</p>
+                    <p>Tip: the Penguin 🐧 indicates the best non-Master difficulty is not Expert</p>
+                </div>
             </template>
             <template x-if="loadingState === 'loaded'">
                 <div>
