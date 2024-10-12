@@ -5,7 +5,7 @@ import Minisearch from 'https://cdn.skypack.dev/minisearch@7.1.0';
 
 window.Alpine = Alpine;  // required for Alpine.js devtools to work
 
-const API_URL = 'https://docs.google.com/spreadsheets/d/1f6JTsV1HzV_9Fy7xsC4bvYm-r2jMErBxGVvYkP7pvV0/export?format=csv&gid=0'
+const API_URL = 'https://docs.google.com/spreadsheets/d/1ci0ngHA3rDP_eVgdXmvbxbRK3vb7XV1UkkKHcV_px_0/export?format=csv&gid=0'
 
 const state = {
     loadingState: 'loading', // loading, error, loaded

@@ -31,8 +31,12 @@
 
         .song_name > p {
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             margin-bottom: 8px;
+        }
+
+        .song_name > p.penguin {
+            background-color:beige;
         }
 
         .difficulty {
@@ -91,7 +95,12 @@
                     <template x-for="result in searchResults">
                         <div class="search_result">
                             <div class="song_name">
-                                <p x-text="result.songNameEN"></p>
+                                <p
+                                    x-text="result.songNameEN"
+                                    :class="result.songNameEN.endsWith('🐧') && 'penguin'"
+                                >
+
+                                </p>
                             </div>
                             <div class="difficulties_and_notes">
                                 <template x-for="difficulty in result.difficulties">
