@@ -1,3 +1,8 @@
+# HOW TO RUN
+# obtain venv with requests in it
+# cd into this directory
+# python3 download_assets.py
+
 import subprocess
 
 import requests
