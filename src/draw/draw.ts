@@ -14,7 +14,7 @@ const HEADER_HEIGHT = 32;
 
 const FC_COLOR = '#FE83FE';
 
-const FONT = 'Atkinson Hyperlegible';
+const FONT = 'Itim';
 
 // [fast-travel-background-images]
 // note that if an image is added from an external URL, the image host must include CORS headers, or

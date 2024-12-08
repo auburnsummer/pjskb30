@@ -7,9 +7,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="preload" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <style>
+#hidden_font_load {
+    font-family: Itim, sans-serif;
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    user-select: none;
+}
+    </style>
   </head>
   <body>
+    <p id="hidden_font_load">abcde</p>
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
