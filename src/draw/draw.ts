@@ -432,16 +432,16 @@ export async function drawImage(containerId: string) {
 
     // add any stickers that were in the saved state
     for (const [stickerId, data] of Object.entries($stickerRecoveryMap.value)) {
-        console.log(stickerId);
-        console.trace(stickerId);
         const { stickerURL, currentProps } = data;
+        // old stickers had a different URL format
+        const fixedStickerURL = stickerURL.startsWith('/assets/') ? stickerURL.replace('/assets', '') : stickerURL;
         if (!currentProps) {
             // we only have the stickerURL but nothing else
             // we can't add it to the stage
             // this is likely because the user closed the window 
             continue;
         }
-        Konva.Image.fromURL(stickerURL, img => {
+        Konva.Image.fromURL(fixedStickerURL, img => {
             img.setAttrs({
                 ...currentProps,
                 id: stickerId,
