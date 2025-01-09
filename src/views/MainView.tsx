@@ -16,7 +16,7 @@ export function MainView() {
             <article class="message is-warning">
                 <div class="message-body">
                     <p>This website will shut down on 2025-01-31.</p>
-                    <p>Please use the sbotga bot available in the 39s discord server instead:</p>
+                    <p>Please use the sbotga bot available in the 39s Discord server instead:</p>
                     <a href="https://discord.gg/35n96naYZK">Invite</a>
                 </div>
             </article>
