@@ -13,6 +13,13 @@ export function MainView() {
     return (
         <div class="container">
             <h2 class="is-size-5">B30 Data Entry</h2>
+            <article class="message is-warning">
+                <div class="message-body">
+                    <p>This website will shut down on 2025-01-31.</p>
+                    <p>Please use the sbotga bot available in the 39s discord server instead:</p>
+                    <a href="https://discord.gg/35n96naYZK">Invite</a>
+                </div>
+            </article>
             <article class="message">
                 <div class="message-body">
                     <p>Mark charts with either AP or FC. The charts are ordered by difficulty. Once you have marked 30 or more charts,
