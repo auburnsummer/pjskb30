@@ -15,9 +15,9 @@ export function MainView() {
             <h2 class="is-size-5">B30 Data Entry</h2>
             <article class="message is-warning">
                 <div class="message-body">
-                    <p>This website will shut down on 2025-01-31.</p>
-                    <p>Please use the sbotga bot available in the 39s Discord server instead:</p>
+                    <p>It is recommended to use the sbotga bot available in the 39s Discord server instead:</p>
                     <a href="https://discord.gg/35n96naYZK">Invite</a>
+                    <p>If you are unable to access the sbotga bot due to region restrictions, this website will continue to be available, but updates may be sporadic.</p>
                 </div>
             </article>
             <article class="message">
