@@ -17,7 +17,7 @@ export function MainView() {
                 <div class="message-body">
                     <p>It is recommended to use the sbotga bot instead (available for JP/EN):</p>
                     <a href="https://discord.com/oauth2/authorize?client_id=1322253224799109281">Add Bot</a>
-                    <p>If you are unable to access the sbotga bot due to region restrictions (KR/TW), this website will continue to be available, but updates may be sporadic.</p>
+                    <p>If you are unable to access the sbotga bot due to region restrictions (KR/TW), this website will continue to be available, but updates may be sporadic. (song images may be missing. Songs that aren't community rated will not be available here.)</p>
                 </div>
             </article>
             <article class="message">
