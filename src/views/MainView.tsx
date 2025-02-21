@@ -15,9 +15,9 @@ export function MainView() {
             <h2 class="is-size-5">B30 Data Entry</h2>
             <article class="message is-warning">
                 <div class="message-body">
-                    <p>It is recommended to use the sbotga bot available in the 39s Discord server instead:</p>
-                    <a href="https://discord.gg/35n96naYZK">Invite</a>
-                    <p>If you are unable to access the sbotga bot due to region restrictions, this website will continue to be available, but updates may be sporadic.</p>
+                    <p>It is recommended to use the sbotga bot instead (available for JP/EN):</p>
+                    <a href="https://discord.com/oauth2/authorize?client_id=1322253224799109281">Add Bot</a>
+                    <p>If you are unable to access the sbotga bot due to region restrictions (KR/TW), this website will continue to be available, but updates may be sporadic.</p>
                 </div>
             </article>
             <article class="message">
