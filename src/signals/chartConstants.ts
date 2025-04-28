@@ -2,7 +2,7 @@ import { signal, computed } from "@preact/signals";
 
 import { parse } from '@vanillaes/csv';
 
-const API_URL_CSV = 'https://docs.google.com/spreadsheets/d/1B8tX9VL2PcSJKyuHFVd2UT_8kYlY4ZdwHwg9MfWOPug/export?format=csv&gid=610789839';
+const API_URL_CSV = 'https://docs.google.com/spreadsheets/d/1B8tX9VL2PcSJKyuHFVd2UT_8kYlY4ZdwHwg9MfWOPug/export?format=csv&gid=1855810409';
 
 export type Difficulty = "Expert" | "Master" | "Append";
 
