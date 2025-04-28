@@ -1,7 +1,10 @@
-# HOW TO RUN
-# obtain venv with requests in it
-# cd into this directory
-# python3 download_assets.py
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "requests",
+# ]
+# ///
 
 import subprocess
 
