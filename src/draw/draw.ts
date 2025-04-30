@@ -89,7 +89,7 @@ function raf() {
 }
 
 function getJacketURL(songId: string) {
-    return `/jackets/jacket_s_${songId.padStart(3, '0')}.png`;
+    return `/jackets/${songId}.png`;
 }
 
 const $currentBackgroundIdx = signal(Math.floor(Math.random() * BG_URLS.length));

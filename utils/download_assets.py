@@ -7,38 +7,61 @@
 # ]
 # ///
 
-import subprocess
 import requests
 import os.path
+import csv
 
 from io import BytesIO
 from PIL import Image
 
-en_musics_url = "https://sekai-world.github.io/sekai-master-db-en-diff/musics.json"
+# this should be the same as in src/signals/chartConstants.ts
+csv_url = 'https://docs.google.com/spreadsheets/d/1AxdRCh55cuaXY_yDnAGmxS9m2rtt_DsKutUyeLPNf6k/export?format=csv&gid=1855810409'
 
-def run(musics_url: str, url_template: str):
-    musics_json = requests.get(musics_url).json()
-    for music in musics_json:
-        jacket_id = music['assetbundleName']
-        target_file_name = f"../assets/jackets/{jacket_id}.png"
-        url = url_template.format(jacket_id=jacket_id)
+# download the csv file.
+resp = requests.get(csv_url, allow_redirects=True)
+# the encoding is not set correctly on Google Sheet's side, so we need to set it manually
+resp.encoding = resp.apparent_encoding
+content = resp.text
+csv_data = csv.reader(content.splitlines(), delimiter=',', dialect=csv.QUOTE_NONE)
+# skip the first row
+next(csv_data)
 
-        # if the file already exists, skip downloading
-        if os.path.exists(target_file_name):
-            print(f"File {target_file_name} already exists, skipping download.")
-        else:
-            # download the file
-            print(f"Downloading {url}")
-            response = requests.get(url)
-            if response.status_code == 200:
-                image = Image.open(BytesIO(response.content))
-                image.thumbnail((256, 256))  # Resize to thumbnail size
-                image.save(target_file_name, "PNG")
-            else:
-                print(f"Failed to download {url}, status code: {response.status_code}")
+id_column = 7
 
-run(en_musics_url, "https://storage.sekai.best/sekai-en-assets/music/jacket/{jacket_id}/{jacket_id}.png")
-
-jp_musics_url = "https://sekai-world.github.io/sekai-master-db-diff/musics.json"
-
-run(jp_musics_url, "https://storage.sekai.best/sekai-jp-assets/music/jacket/{jacket_id}/{jacket_id}.png")
+for row in csv_data:
+    if len(row) < id_column:
+        print("Row is too short, skipping")
+        continue
+    chart_id = row[id_column].strip()
+    if chart_id == '':
+        print("Chart ID is empty, skipping")
+        continue
+    target_file_name = f"../assets/jackets/{chart_id}.png"
+    if os.path.exists(target_file_name):
+        print(f"Jacket for {chart_id} already exists")
+        continue
+    # call the cyanvas API to find the URL of the jacket
+    # the API URL is https://cc.sevenc7c.com/api/charts/{chart_id}
+    # e.g. https://cc.sevenc7c.com/api/charts/Asc67jEMRNRyQLVXgdQprSG
+    api_url = f"https://cc.sevenc7c.com/api/charts/{chart_id}"
+    response = requests.get(api_url)
+    if response.status_code != 200:
+        print(f"Failed to download chart {chart_id}: {response.status_code}")
+        print(row)
+        continue
+    # then get the image URL from the response
+    data = response.json()
+    try:
+        chart_img = data['chart']['cover']
+        if chart_img is None:
+            print(f"Chart {chart_id} has no image")
+            continue
+        print(f"Downloading chart {chart_id} from {chart_img}")
+        # and finally download the image, resize it to 256x256 and save it
+        image_data = requests.get(chart_img).content
+        image = Image.open(BytesIO(image_data))
+        image.thumbnail((256, 256))  # Resize to thumbnail size
+        image.save(target_file_name, "PNG")
+    except KeyError:
+        print(f"Failed to find chart image for {chart_id}")
+        continue
