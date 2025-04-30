@@ -2,12 +2,12 @@ import { signal, computed } from "@preact/signals";
 
 import { parse } from '@vanillaes/csv';
 
-const API_URL_CSV = 'https://docs.google.com/spreadsheets/d/1B8tX9VL2PcSJKyuHFVd2UT_8kYlY4ZdwHwg9MfWOPug/export?format=csv&gid=1855810409';
+const API_URL_CSV = 'https://docs.google.com/spreadsheets/d/1AxdRCh55cuaXY_yDnAGmxS9m2rtt_DsKutUyeLPNf6k/export?format=csv&gid=1855810409';
 
-export type Difficulty = "Expert" | "Master" | "Append";
+export type Difficulty = "Expert" | "Master" | "Append" | "Megamix";
 
 export const isDifficulty = (s: string): s is Difficulty => {
-    return ["Expert", "Master", "Append"].includes(s);
+    return ["Expert", "Master", "Append", "Megamix"].includes(s);
 }
 
 export type Song = {
@@ -61,21 +61,25 @@ async function fetchData() {
         const dataWithoutFirstRow = data.slice(1);  // first row is header
         const newSongData: SongMap = {};
         dataWithoutFirstRow.forEach(row => {
-            const songId = row[6];
+            const songId = row[7];
             const diffConstant = parseFloat(row[2]);
             if (songId === '' || Number.isNaN(diffConstant)) {
                 // skip this row, we don't have enough information to use this chart
                 console.log('skipping row', row);
+                return;
             }
             const songNameEn = row[0];
             const songNameJp = row[1];
             const diffLevel = row[3];
             const noteCount = parseInt(row[4]);
-            const difficulty = isDifficulty(row[5]) ? row[5] : "Expert";
+            const difficulty = isDifficulty(row[5]) ? row[5] : "Master";
             if (!isDifficulty(row[5])) {
-                console.warn(`Song ${songNameEn} has an unknown difficulty, falling back to Expert`)
+                console.warn(`Song ${songNameEn} has an unknown difficulty, falling back to Master`)
             }
-            const uid = songId + difficulty;
+            // for custom charts, each cyanvas id corresponds to an individual CHART and not a song
+            // e.g. Ether APPEND and Ether MASTER are different ids
+            // hence the id alone is sufficient to uniquely identify a chart
+            const uid = songId;
             const newRow = {
                 songNameEn: songNameEn,
                 songNameJp: songNameJp,

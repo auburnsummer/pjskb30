@@ -3,8 +3,8 @@ import { computed } from '@preact/signals';
 import { $chartConstantData, Song } from './chartConstants.js';
 import { localStorageSignal } from './utils.js';
 
-const CLEAR_DATA_LS_KEY = '_x_clearData';
-const PINNED_CHART_LS_KEY = '_x_pinnedChart';
+const CLEAR_DATA_LS_KEY = '_x_kizuClearData';
+const PINNED_CHART_LS_KEY = '_x_kizuPinnedChart';
 
 const NOT_AP_SCORE_REDUCTION = 1;
 
