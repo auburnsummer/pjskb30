@@ -13,19 +13,20 @@ export function MainView() {
     return (
         <div class="container">
             <h2 class="is-size-5">B30 Data Entry</h2>
-            <article class="message is-warning">
-                <div class="message-body">
-                    <p>It is recommended to use the sbotga bot instead (available for JP/EN):</p>
-                    <a href="https://discord.com/oauth2/authorize?client_id=1322253224799109281">Add Bot</a>
-                    <p>If you are unable to access the sbotga bot due to region restrictions (KR/TW), this website will continue to be available, but updates may be sporadic. (song images may be missing. Songs that aren't community rated will not be available here.)</p>
-                </div>
-            </article>
-            <article class="message">
+            <article class="message is-info">
                 <div class="message-body">
                     <p>Mark charts with either AP or FC. The charts are ordered by difficulty. Once you have marked 30 or more charts,
                     charts that would not make it into the b30 are grayed out.</p>
                     <p>You can pin a chart by clicking the "Pinned" column. A pinned chart always appears at the front.</p>
                     <p><a href="https://github.com/auburnsummer/pjskb30">View GitHub of this project</a></p>
+
+                </div>
+            </article>
+            <article class="message">
+                <div class="message-body">
+                    <p>If you're in JP or Global servers, the Sbotga Discord bot is available!</p>
+                    <a href="https://discord.com/oauth2/authorize?client_id=1322253224799109281">Add Bot</a>
+                    <p>It can track your b30 without manual data entry.</p>
                 </div>
             </article>
             <div class="pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
