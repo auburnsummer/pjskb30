@@ -1,4 +1,7 @@
 name: Get Jackets
+permissions:
+  contents: write
+  pull-requests: write
 on: [workflow_dispatch]
 jobs:
   get-jackets:
