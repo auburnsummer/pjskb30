@@ -13,13 +13,6 @@ export function MainView() {
     return (
         <div class="container">
             <h2 class="is-size-5">B30 Data Entry</h2>
-            <article class="message is-warning">
-                <div class="message-body">
-                    <p>It is recommended to use the sbotga bot instead (available for JP/EN):</p>
-                    <a href="https://discord.com/oauth2/authorize?client_id=1322253224799109281">Add Bot</a>
-                    <p>If you are unable to access the sbotga bot due to region restrictions (KR/TW), this website will continue to be available, but updates may be sporadic. (song images may be missing. Songs that aren't community rated will not be available here.)</p>
-                </div>
-            </article>
             <article class="message">
                 <div class="message-body">
                     <p>Mark charts with either AP or FC. The charts are ordered by difficulty. Once you have marked 30 or more charts,
