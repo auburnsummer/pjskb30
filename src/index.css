@@ -14,20 +14,6 @@
   background-color: #ff7a7a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-      .tag.Append {
-          background-color: #a30085;
-      }
-      .tag.Master {
-          background-color: #4d0187;
-      }
-      .tag.Expert {
-          background-color: #910117;
-      }
-  }
-}
-
 /*! stylize.css v1.0.0 | License MIT | https://github.com/vasanthv/stylize.css */
 :root{
   --text: #333333;
