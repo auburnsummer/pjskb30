@@ -25,7 +25,7 @@ export function MainView() {
             <article class="message">
                 <div class="message-body">
                     <p>If you're in JP or Global servers, the Sbotga Discord bot is available!</p>
-                    <a href="https://discord.com/oauth2/authorize?client_id=1322253224799109281">Add Bot</a>
+                    <a href="https://sbuga.com">Add Bot</a>
                     <p>It can track your b30 without manual data entry.</p>
                 </div>
             </article>
