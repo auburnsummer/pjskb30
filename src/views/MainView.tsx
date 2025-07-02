@@ -29,7 +29,7 @@ export function MainView() {
                     <p>It can track your b30 without manual data entry.</p>
                 </div>
             </article>
-            <div class="pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
+            <div class="controls-toolbar pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
                 <label for="language-select">Song Language (not server):</label>
                 <select
                     name="language"
@@ -56,22 +56,24 @@ export function MainView() {
                     Generate Image
                 </button>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Song</th>
-                        <th>Difficulty</th>
-                        <th>In-Game Difficulty</th>
-                        <th>AP/FC</th>
-                        <th>Pinned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        $sortedIds.value.map(uid => <SongTableRow song={songs[uid]} />)
-                    }
-                </tbody>
-            </table>
+            <div class="table-container table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Song</th>
+                            <th>Difficulty</th>
+                            <th>In-Game Difficulty</th>
+                            <th>AP/FC</th>
+                            <th>Pinned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            $sortedIds.value.map(uid => <SongTableRow song={songs[uid]} />)
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

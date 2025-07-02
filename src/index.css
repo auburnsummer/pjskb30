@@ -322,3 +322,135 @@ list-style: none;
 .song-info:hover img {
   display: inline;
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  body {
+    margin: 5px;
+  }
+  
+  .container {
+    padding: 0;
+  }
+  
+  /* Make buttons stack vertically on mobile */
+  .controls-toolbar {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    align-items: stretch;
+  }
+  
+  .controls-toolbar > * {
+    width: 100%;
+  }
+  
+  /* Responsive table */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table {
+    min-width: 100%;
+    font-size: 0.875rem;
+  }
+  
+  /* Hide less important columns on very small screens */
+  @media (max-width: 480px) {
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+      display: none;
+    }
+  }
+  
+  /* Make form controls more touch-friendly */
+  .radios label {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    padding: 0.25rem;
+    min-height: 44px;
+  }
+  
+  .radios input[type="radio"] {
+    margin-right: 0.25rem;
+    transform: scale(1.2);
+  }
+  
+  button {
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Make table cells more compact */
+  .table td {
+    padding: 0.5rem 0.25rem;
+    vertical-align: middle;
+  }
+  
+  /* Improve AP/FC column layout */
+  .table td.is-flex {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+  
+  .radios {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Card-style layout for very small screens */
+@media (max-width: 480px) {
+  .mobile-card-layout {
+    display: none;
+  }
+  
+  .table-responsive {
+    display: block;
+  }
+  
+  .table-responsive .table {
+    border: 0;
+  }
+  
+  .table-responsive .table thead {
+    display: none;
+  }
+  
+  .table-responsive .table tr {
+    border: 1px solid var(--text-light);
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    display: block;
+    background-color: var(--text-lighter);
+  }
+  
+  .table-responsive .table td {
+    border: none;
+    display: block;
+    padding: 0.25rem 0;
+    text-align: left;
+  }
+  
+  .table-responsive .table td:before {
+    content: attr(data-label) ": ";
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+  }
+  
+  .table-responsive .table td.is-flex {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .table-responsive .table td.is-flex:before {
+    width: 120px;
+    flex-shrink: 0;
+  }
+}

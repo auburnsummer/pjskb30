@@ -17,16 +17,17 @@ export function SongTableRow({ song }: SongTableRowProps) {
         <tr>
             <td
                 class={isIrrelevant ? 'has-text-grey-light' : ''}
+                data-label="Song"
             >
                 {$currentLanguage.value === 'en' ? song.songNameEn : song.songNameJp}
             </td>
-            <td>
+            <td data-label="Difficulty">
                 <span class={`tag ${song.difficulty}`}>
                     {song.difficulty}
                 </span>
             </td>
-            <td>{song.diffLevel}</td>
-            <td class="is-flex is-flex-direction-row is-align-content-center is-gap-1">
+            <td data-label="In-Game Difficulty">{song.diffLevel}</td>
+            <td class="is-flex is-flex-direction-row is-align-content-center is-gap-1" data-label="AP/FC">
                 <div class="radios">
                     <label for={'fc' + song.uid}>
                         <input
@@ -62,7 +63,7 @@ export function SongTableRow({ song }: SongTableRowProps) {
                     </button> 
                 }
             </td>
-            <td>
+            <td data-label="Pinned">
                 {
                     $pinnedChart.value === song.uid
                         ? (
