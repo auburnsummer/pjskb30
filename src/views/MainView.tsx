@@ -22,13 +22,6 @@ export function MainView() {
 
                 </div>
             </article>
-            <article class="message">
-                <div class="message-body">
-                    <p>If you're in JP or Global servers, the Sbotga Discord bot is available!</p>
-                    <a href="https://sbuga.com">Add Bot</a>
-                    <p>It can track your b30 without manual data entry.</p>
-                </div>
-            </article>
             <div class="controls-toolbar pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
                 <label for="language-select">Song Language (not server):</label>
                 <select
