@@ -9,11 +9,6 @@ best achievements.
 Previously, this was available automatically via a bot that used a publically
 available API. However, that API is now no longer available.
 
-There is also a [semi-automated](https://discord.com/oauth2/authorize?client_id=1322253224799109281) 
-option instead which works by temporarily transferring your account so that the bot
-can read the save data. If you are comfortable with your account temporarily being
-transferred, it is recommended to use the automated option over this tool.
-
 # Running
 
 This codebase consists of two parts:
