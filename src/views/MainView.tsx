@@ -23,7 +23,7 @@ export function MainView() {
                 </div>
             </article>
             <div class="controls-toolbar pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
-                <label for="language-select">Song Title Language:</label>
+                <label for="language-select">Song Title Language*:</label>
                 <select
                     name="language"
                     id="language-select"
@@ -54,6 +54,10 @@ export function MainView() {
                     Generate Image
                 </button>
             </div>
+            <p class="help">
+            *Shows the song title in the selected language/region.  
+            If no title exists for that region, it falls back through other regions in order: English → Japanese → Korean → Taiwan → China → finally English (Community).
+            </p>
             <div class="table-container table-responsive">
                 <table class="table">
                     <thead>

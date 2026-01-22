@@ -72,7 +72,7 @@ let officialSongNames: Record < Region, Record < string, string >> = {
 
 
 async function loadOfficialSongNames() {
-    const res = await fetch("/assets/song_names_official.json");
+    const res = await fetch("/song_names_official.json");
     officialSongNames = await res.json();
 }
 
