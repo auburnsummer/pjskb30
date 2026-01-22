@@ -60,5 +60,5 @@ for region, region_url in region_urls.items():
         f"https://storage.sekai.best/sekai-{region}-assets/music/jacket/{{jacket_id}}/{{jacket_id}}.png",
         region,
     )
-with open("song_names_official.json", "w+", encoding="utf8") as f:
+with open("../assets/song_names_official.json", "w+", encoding="utf8") as f:
     json.dump(song_name_map, f)
