@@ -19,7 +19,7 @@ export function SongTableRow({ song }: SongTableRowProps) {
                 class={isIrrelevant ? 'has-text-grey-light' : ''}
                 data-label="Song"
             >
-                {$currentLanguage.value === 'en' ? song.songNameEn : song.songNameJp}
+                {$currentLanguage.value === 'en' ? song.songNameEn : song.songNameNonEn}
             </td>
             <td data-label="Difficulty">
                 <span class={`tag ${song.difficulty}`}>

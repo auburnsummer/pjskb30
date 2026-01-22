@@ -31,7 +31,7 @@ export function MainView() {
                     onChange={e => $currentLanguage.value = (e.target as HTMLSelectElement).value}
                 >
                     <option value="en">English</option>
-                    <option value="jp">Japanese</option>
+                    <option value="nonEn">Original Language</option>
                 </select>
                 <button
                     onClick={() => {

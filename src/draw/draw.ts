@@ -355,7 +355,7 @@ export async function drawImage(containerId: string) {
             y: yPos + JACKET_PADDING,
             width: CARD_WIDTH - (3 * JACKET_PADDING) - JACKET_WIDTH,
             height: JACKET_WIDTH,
-            text: $currentLanguage.value === 'en' ? song.songNameEn : song.songNameJp,
+            text: $currentLanguage.value === 'en' ? song.songNameEn : song.songNameNonEn,
             fontSize: 20,
             fill: 'black',
             fontFamily: FONT,

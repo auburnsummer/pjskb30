@@ -16,15 +16,21 @@ from PIL import Image
 region_urls = {
     **{
         region: f"https://sekai-world.github.io/sekai-master-db-{region}-diff/musics.json"
-        for region in ["en", "kr", "cn", "tc"] # NOTE: tc?? why not tw. thanks sekai.best
+        for region in [
+            "en",
+            "kr",
+            "cn",
+            "tc",
+        ]  # NOTE: tc?? why not tw. thanks sekai.best
     },
-    "jp": "https://sekai-world.github.io/sekai-master-db-diff/musics.json"
+    "jp": "https://sekai-world.github.io/sekai-master-db-diff/musics.json",
 }
+
 
 def run(musics_url: str, url_template: str):
     musics_json = requests.get(musics_url).json()
     for music in musics_json:
-        jacket_id = music['assetbundleName']
+        jacket_id = music["assetbundleName"]
         target_file_name = f"../assets/jackets/{jacket_id}.png"
         url = url_template.format(jacket_id=jacket_id)
 
@@ -42,5 +48,9 @@ def run(musics_url: str, url_template: str):
             else:
                 print(f"Failed to download {url}, status code: {response.status_code}")
 
+
 for region, region_url in region_urls.items():
-    run(region_url, f"https://storage.sekai.best/sekai-{region}-assets/music/jacket/{{jacket_id}}/{{jacket_id}}.png")
+    run(
+        region_url,
+        f"https://storage.sekai.best/sekai-{region}-assets/music/jacket/{{jacket_id}}/{{jacket_id}}.png",
+    )
