@@ -23,7 +23,7 @@ export function MainView() {
                 </div>
             </article>
             <div class="controls-toolbar pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
-                <label for="language-select">Song Language (not server):</label>
+                <label for="language-select">Song Title Language:</label>
                 <select
                     name="language"
                     id="language-select"
@@ -31,7 +31,7 @@ export function MainView() {
                     onChange={e => $currentLanguage.value = (e.target as HTMLSelectElement).value}
                 >
                     <option value="en">English</option>
-                    <option value="nonEn">Original Language</option>
+                    <option value="nonEn">Original</option>
                 </select>
                 <button
                     onClick={() => {
