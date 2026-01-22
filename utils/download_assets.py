@@ -8,6 +8,7 @@
 # ///
 
 import requests
+import json
 import os.path
 
 from io import BytesIO
@@ -26,10 +27,14 @@ region_urls = {
     "jp": "https://sekai-world.github.io/sekai-master-db-diff/musics.json",
 }
 
+song_name_map = {}
 
-def run(musics_url: str, url_template: str):
+
+def run(musics_url: str, url_template: str, region: str):
     musics_json = requests.get(musics_url).json()
+    song_name_map[region] = {}
     for music in musics_json:
+        song_name_map[region][music["id"]] = music["title"]
         jacket_id = music["assetbundleName"]
         target_file_name = f"../assets/jackets/{jacket_id}.png"
         url = url_template.format(jacket_id=jacket_id)
@@ -53,4 +58,7 @@ for region, region_url in region_urls.items():
     run(
         region_url,
         f"https://storage.sekai.best/sekai-{region}-assets/music/jacket/{{jacket_id}}/{{jacket_id}}.png",
+        region,
     )
+with open("song_names_official.json", "w+", encoding="utf8") as f:
+    json.dump(song_name_map, f)
