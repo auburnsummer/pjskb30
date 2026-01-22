@@ -30,8 +30,13 @@ export function MainView() {
                     class="select is-small"
                     onChange={e => $currentLanguage.value = (e.target as HTMLSelectElement).value}
                 >
-                    <option value="en">English</option>
+                    <option value="enc">English (Community)</option>
                     <option value="nonEn">Original</option>
+                    <option value="en">English Server</option>
+                    <option value="jp">Japanese Server</option>
+                    <option value="kr">Korean Server</option>
+                    <option value="tc">Taiwan Server</option>
+                    <option value="cn">China Server</option>
                 </select>
                 <button
                     onClick={() => {
