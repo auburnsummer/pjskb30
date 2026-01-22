@@ -7,14 +7,19 @@
 # ]
 # ///
 
-import subprocess
 import requests
 import os.path
 
 from io import BytesIO
 from PIL import Image
 
-en_musics_url = "https://sekai-world.github.io/sekai-master-db-en-diff/musics.json"
+region_urls = {
+    **{
+        region: f"https://sekai-world.github.io/sekai-master-db-{region}-diff/musics.json"
+        for region in ["en", "kr", "cn", "tc"] # NOTE: tc?? why not tw. thanks sekai.best
+    },
+    "jp": "https://sekai-world.github.io/sekai-master-db-diff/musics.json"
+}
 
 def run(musics_url: str, url_template: str):
     musics_json = requests.get(musics_url).json()
@@ -37,8 +42,5 @@ def run(musics_url: str, url_template: str):
             else:
                 print(f"Failed to download {url}, status code: {response.status_code}")
 
-run(en_musics_url, "https://storage.sekai.best/sekai-en-assets/music/jacket/{jacket_id}/{jacket_id}.png")
-
-jp_musics_url = "https://sekai-world.github.io/sekai-master-db-diff/musics.json"
-
-run(jp_musics_url, "https://storage.sekai.best/sekai-jp-assets/music/jacket/{jacket_id}/{jacket_id}.png")
+for region, region_url in region_urls.items():
+    run(region_url, f"https://storage.sekai.best/sekai-{region}-assets/music/jacket/{{jacket_id}}/{{jacket_id}}.png")
