@@ -23,15 +23,20 @@ export function MainView() {
                 </div>
             </article>
             <div class="controls-toolbar pb-2 pt-2 is-flex is-flex-direction-row is-gap-1">
-                <label for="language-select">Song Language (not server):</label>
+                <label for="language-select">Song Title Language*:</label>
                 <select
                     name="language"
                     id="language-select"
                     class="select is-small"
                     onChange={e => $currentLanguage.value = (e.target as HTMLSelectElement).value}
                 >
-                    <option value="en">English</option>
-                    <option value="jp">Japanese</option>
+                    <option value="enc">English (Community)</option>
+                    <option value="nonEn">Original</option>
+                    <option value="en">English Server</option>
+                    <option value="jp">Japanese Server</option>
+                    <option value="kr">Korean Server</option>
+                    <option value="tc">Taiwan Server</option>
+                    <option value="cn">China Server</option>
                 </select>
                 <button
                     onClick={() => {
@@ -49,6 +54,10 @@ export function MainView() {
                     Generate Image
                 </button>
             </div>
+            <p class="help">
+            *Shows the song title in the selected language/region.  
+            If no title exists for that region, it falls back through other regions in order: English → Japanese → Korean → Taiwan → China → finally English (Community).
+            </p>
             <div class="table-container table-responsive">
                 <table class="table">
                     <thead>
