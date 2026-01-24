@@ -2,7 +2,10 @@ name: Get Jackets
 permissions:
   contents: write
   pull-requests: write
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 1 * * 0' # once a week 1:15 AM on Sundays GMT
 jobs:
   get-jackets:
     runs-on: ubuntu-latest
