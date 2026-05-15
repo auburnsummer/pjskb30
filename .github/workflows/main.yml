@@ -5,7 +5,7 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 1 * * 0' # once a week 1:15 AM on Sundays GMT
+    - cron: '16 1 * * 0' # once a week 1:16 AM on Sundays GMT
 jobs:
   get-jackets:
     runs-on: ubuntu-latest
